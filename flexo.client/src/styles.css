@@ -1,10 +1,46 @@
 * { box-sizing: border-box; }
+:root {
+  /* Дефолтные значения, если тема не загружена */
+  --bg-color: #ffffff;
+  --text-color: #111111;
+  --primary-color: #3b82f6;
+  --panel-shadow-color: rgba(2, 26, 163, 0.218);
+  --font-family: system-ui, -apple-system, sans-serif;
+  --font-size-base: 16px;
+  --border-radius: 8px;
+}
+
+/* Если тема тёмная — переопределяем переменные */
+body.dark-theme {
+  --bg-color: #1e1e21;
+  --text-color: #f3f4f6;
+}
+
 body {
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+}
+
+.panel-shadow {
+  box-shadow: 7px 10px 5px var(--panel-shadow-color);
+  border-radius: var(--border-radius);
+  margin: 10px 10px 0 10px;
+  height: 70px;
+}
+
+h1, h2, h3 {
+  color: var(--primary-color);
+}
+
+
+/* body {
   margin: 0;
   font-family: system-ui, sans-serif;
   background: #f4f5f7;
   color: #222;
-}
+} */
 
 .page-center {
   min-height: 100vh;
@@ -55,9 +91,21 @@ button:disabled { opacity: .6; }
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 24px;
+  padding: 5px 15px;
   background: #fff;
-  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+
+.panel-shadow {
+  /* Значения по умолчанию, если бэкенд не прислал данные */
+  --shadow-color: rgba(2, 26, 163, 0.218);
+  --shadow-x: 7px;
+  --shadow-y: 10px;
+  --shadow-blur: 5px;
+  
+  box-shadow: var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-color);
+  margin: 10px 10px 0 10px;
+  height: 70px;
+  border-radius: 5px;
 }
 
 .panels {
@@ -71,6 +119,27 @@ button:disabled { opacity: .6; }
 
 .list { margin: 10px 0 0; padding-left: 18px; }
 .list li { padding: 4px 0; }
+
+/* ← ДОБАВЛЕНО: проявление тёмного фона */
+.popup-overlay {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* ← ДОБАВЛЕНО: карточка чуть выплывает снизу и проявляется */
+.popup-card {
+  animation: slideUp 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 
 @media (max-width: 720px) {
   .panels { grid-template-columns: 1fr; }

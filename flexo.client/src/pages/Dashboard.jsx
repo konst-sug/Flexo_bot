@@ -55,7 +55,7 @@ export default function DashboardPage() {
 
   return (
     <div className="page">
-      <header className="topbar">
+      <header className="topbar panel-shadow">
         <h1>Панель управления</h1>
         <button onClick={logout}>Выйти</button>
       </header>
