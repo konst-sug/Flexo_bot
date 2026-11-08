@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { api } from '../api';
 import TextareaCard from '../components/TextAreaCard';
+import MenuWithModal from '../components/MenuWithModal';
 
 export default function DashboardPage() {
   const [items, setItems] = useState([]);
@@ -56,36 +57,19 @@ export default function DashboardPage() {
     <div className="panels">
       {/* Панель 2: поиск по списку */}
       <section className="card">
-        <TextareaCard
-          title="Комментарий"
-          value={comment}
-          onChange={setComment}
-          placeholder="Напишите комментарий…"
-          minRows={3}
-          maxRows={10}
-          className="full-width" // .full-width { width: 100%; }
+        <MenuWithModal
         />
-      </section>
-      <section>
         <TextareaCard
-        title="Заметка"
-        value={note}
-        onChange={setNote}
-        placeholder="Введите текст…"
-      />
-      {/* <button onClick={handleCreate}>Выйти</button> */}
+          title="Текущие настройки"
+          value={note}
+          onChange={setNote}
+          placeholder=""
+          rows={8}
+          cols={60}
+          style={{ fontFamily: 'monospace' }} // если нужно, передайте style отдельно или добавьте проп
+                />
       </section>
-      <section>
-      
-    <TextareaCard
-        title="Код"
-        value={code}
-        onChange={setCode}
-        rows={8}
-        cols={60}
-        style={{ fontFamily: 'monospace' }} // если нужно, передайте style отдельно или добавьте проп
-      />
-      </section>
+
     </div>
   );
 }

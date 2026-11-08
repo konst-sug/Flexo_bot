@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { api } from '../api';
 import AnswerCard from '../components/AnswerCard';
+import IconButton from '../components/IconButton';
+import Select from '../components/Select';
+import TextareaCard from '../components/TextAreaCard';
+import FilePickCard from '../components/FilePickCard';
 
 export default function DashboardPage() {
   const [items, setItems] = useState([]);
@@ -12,10 +16,11 @@ export default function DashboardPage() {
 
   const [answer, setAnswer] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [mode, setMode] = useState('question'); // 'question' | 'multitext' | 'prompt'
 
   // после успешного ответа от pipeline:
-  <AnswerCard text={answer} isLoading={isLoading} />
-
+  const selectedPrompt = '';
+  const promptOptions = [];
   // форма 2: поиск
   const [query, setQuery] = useState('');
 
@@ -57,35 +62,19 @@ export default function DashboardPage() {
     <div className="panels">
       {/* Панель 1: создание элемента */}
       <section className="card">
-        <h2>Новый элемент</h2>
-        <form onSubmit={handleCreate}>
-          <label>
-            Название
-            <input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Например, отчёт за ноябрь"
-            />
-          </label>
-          <button type="submit" disabled={creating}>
-            {creating ? 'Сохраняем…' : 'Добавить'}
-          </button>
-          {createMsg && <p className="hint">{createMsg}</p>}
-        </form>
-      </section>
-
-      {/* Панель 2: поиск по списку */}
-      <section className="card">
-        <h2>Поиск</h2>
+      <h2>Поиск</h2>
         <form onSubmit={(e) => e.preventDefault()}>
           <label>
-            Запрос
+            Поиск в хранилище
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Введите часть названия"
             />
           </label>
+          <button type="submit" disabled={creating}>
+            {creating ? 'Поиск…' : 'Искать'}
+          </button>
         </form>
         <ul className="list">
           {filtered.length === 0 && <li>Ничего не найдено</li>}
@@ -93,6 +82,74 @@ export default function DashboardPage() {
             <li key={it.id ?? it.title}>{it.title}</li>
           ))}
         </ul>
+
+        {/* --- ИЗМЕНЕНО: заголовок с тремя иконками справа --- */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <h2>Новый запрос</h2>
+        <div style={{ display: 'flex', gap: '4px' }}>
+          <IconButton
+            icon="▶️"
+            onClick={() => setMode('question')}
+            title="Вопрос"
+            className={mode === 'question' ? 'active' : ''}
+          />
+          <IconButton
+            icon="🗑️"
+            onClick={() => setMode('multitext')}
+            title="Мультитекст"
+            className={mode === 'multitext' ? 'active' : ''}
+          />
+          <IconButton
+            icon="📄"
+            onClick={() => setMode('prompt')}
+            title="Промпт +"
+            className={mode === 'prompt' ? 'active' : ''}
+          />
+        </div>
+      </div>
+       
+      {/* --- ИЗМЕНЕНО: показываем только активный блок --- */}
+      {mode === 'question' && (
+        <form onSubmit={handleCreate}>
+          <label>
+            Введите запрос
+            <input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Например, напиши функцию на Elixir"
+            />
+          </label>
+        </form>
+      )}
+
+      {mode === 'multitext' && (
+        <TextareaCard
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+      )}
+
+      {mode === 'prompt' && (
+        <div>
+          <Select
+            label="Промпт"
+            name="prompt"
+            value={selectedPrompt}
+            onChange={(e) => setSelectedPrompt(e.target.value)}
+            options={promptOptions} // массив [{ value, label }]
+          />
+          <FilePickCard />
+        </div>
+      )}
+      <button type="submit" disabled={creating}>
+            {creating ? 'Сохраняем…' : 'Отправить'}
+          </button>
+      {createMsg && <p className="hint">{createMsg}</p>}
+    </section>
+
+      {/* Панель 2: результат*/}
+      <section className="card">
+        <AnswerCard text={answer} isLoading={isLoading} />
       </section>
     </div>
   );

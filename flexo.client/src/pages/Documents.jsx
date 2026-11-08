@@ -1,9 +1,16 @@
 import { useState, useEffect } from 'react';
 import { api } from '../api';
 import FilePickCard from '../components/FilePickCard';
+import TextareaCard from '../components/TextAreaCard';
 
 export default function DashboardPage() {
   const [items, setItems] = useState([]);
+  const [note, setNote] = useState('');
+
+  const comment = '';
+  const setComment = '';
+  const code = 'Это код';
+  const setCode = 'Код';
 
   // форма 1: создание
   const [title, setTitle] = useState('');
@@ -68,34 +75,28 @@ async function handleFile(picked) {
     <div className="panels">
       {/* Панель 2: поиск по списку */}
       <section className="card">
-        <h2>Поиск</h2>
-        <form onSubmit={(e) => e.preventDefault()}>
-          <label>
-            Запрос
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Введите часть названия"
-            />
-          </label>
+        <h2>Xранилище</h2>
+        <FilePickCard />
+      </section>
+
+      <section className='card'>
+      <form onSubmit={handleCreate}>
+        <TextareaCard
+          title="Библиотека промптов"
+          value={note}
+          onChange={setNote}
+          placeholder="Введите текст…"
+          rows={8}
+          cols={60}
+          style={{ fontFamily: 'monospace' }} // если нужно, передайте style отдельно или добавьте проп
+        />
+        <button type="submit" disabled={creating}>
+            {creating ? 'Сохраняем…' : 'Отправить'}
+          </button>
+      {createMsg && <p className="hint">{createMsg}</p>}
         </form>
-        <ul className="list">
-          {filtered.length === 0 && <li>Ничего не найдено</li>}
-          {filtered.map((it) => (
-            <li key={it.id ?? it.title}>{it.title}</li>
-          ))}
-        </ul>
-      </section>
-      <section className="card">
-        <FilePickCard
-        title="Файл"
-        file={file}
-        onSelect={setFile}
-        onClear={() => setFile(null)}
-        onSubmit={handleFile}
-        accept="audio/wav,.wav"
-      />
-      </section>
+            </section>
+           
     </div>
     
   );
