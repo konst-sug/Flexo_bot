@@ -28,6 +28,7 @@ async def lifespan(app: FastAPI):
     # observer.start()
 
     await db.connect()
+    await db.init_database()
 
     yield
 

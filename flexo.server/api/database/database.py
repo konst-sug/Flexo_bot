@@ -1,4 +1,5 @@
 import asyncpg
+from pathlib import Path
 
 
 class AsyncPGDB:
@@ -37,6 +38,20 @@ class AsyncPGDB:
         if self._pool is not None:
             await self._pool.close()
 
+
+    async def init_database(self):
+        sql_folder = Path(__file__).parent / "sql"
+        
+        # Получаем список файлов, сортируем их и выполняем
+        sql_files = sorted(sql_folder.glob("*.sql"))
+        
+        for sql_file in sql_files:
+            async with await self._pool.acquire() as conn:
+                async with conn.transaction():
+                    sql = await sql_file.read_text(encoding='utf-8')
+                    # Выполняем весь файл целиком
+                    await conn.execute(sql)
+                    print(f"Applied {sql_file.name}")
 
     async def execute(self, logger, sql_query, *args):
         """Выполняем SQL-запросы."""
