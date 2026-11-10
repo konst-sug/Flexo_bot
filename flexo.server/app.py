@@ -3,14 +3,19 @@ import logging
 import asyncio
 
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Request, Response, HTTPException, Depends, Form
+from typing import Optional
+from fastapi import FastAPI, Request, Response, File, UploadFile, Depends, Form
 from fastapi.responses import JSONResponse
 #from watchdog.observers.polling import PollingObserver
 from api.security import mySecurity, create_access_token, authorized, registration_check
-from api import db, ServiceRunner
-from api.service import VoiceFileHandler, universal_extract_docs, shutdown_executor
+from api import db
+from api.service import universal_extract_docs, shutdown_executor
+from api.models import QueryResult
+from api.service import QueryProcessor
 
-logger = logging.basicConfig(level=Warning)
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.WARNING)
+
 users_json = 'users.json'
 users_dict = []
 loop_ref = None
@@ -87,8 +92,49 @@ async def logout_user(request: Request):
     pass
 
 
+@app.post("/api/query")
+async def query(
+    content: str = Form(None),
+    prompt: Optional[str] = Form(None),
+    file: Optional[UploadFile] = File(None),
+):
+    # читаем байты файла (если он пришёл)
+    file_bytes: Optional[bytes] = None
+    if file is not None:
+        file_bytes = await file.read()
+        # file.filename, file.content_type — имя и MIME-тип
+
+    result = {
+        "text": file.filename,
+        "content_received": content,
+        "prompt_received": prompt,
+        "file": {
+            "name": file.filename,
+            "type": file.content_type,
+            "size": len(file_bytes),
+        } if file_bytes is not None else None,
+    }
+    return result
+
 # @app.post("/commands/upload")
 # async def upload(file: UploadFile):
 #     dest = Path(WATCH_PATH) / file.filename
 #     dest.write_bytes(await file.read())
 #     return {"status": "queued"}
+
+@app.post("/query", response_model=QueryResult)
+async def query(
+    content: str = Form(...),
+    prompt: Optional[str] = Form(None),
+    file: Optional[UploadFile] = File(None),
+) -> QueryResult:
+    file_bytes = await file.read() if file is not None else None
+    query_service = QueryProcessor()
+
+    return await query_service.process_query(
+        content=content,
+        prompt=prompt,
+        file_name=file.filename if file else None,
+        file_type=file.content_type if file else None,
+        file_bytes=file_bytes,
+    )

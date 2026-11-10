@@ -3,13 +3,16 @@ import jwt
 
 from datetime import datetime, timedelta
 from fastapi import Form, HTTPException, Request
-from config import get_users
+
 
 KEY =  'secret'
 ALG = 'HS256'
 EXPIRE_DELTA = 15
 
+def get_users():
+    return {'user_mail':'123@mail.lk', 'user_password':'password'}
 
+    
 def mySecurity(login: str = Form(...), password: str = Form(...)):
     """Функция проверки пользователя в системе"""
     us_dict = get_users()

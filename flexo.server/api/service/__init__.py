@@ -4,6 +4,7 @@ from concurrent.futures import ThreadPoolExecutor
 from glob import glob
 
 from .extractor import ArchiveExtractor, path
+from .query_processor import QueryProcessor
 
 
 logger = logging.getLogger(__name__)

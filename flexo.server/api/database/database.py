@@ -1,8 +1,11 @@
 import asyncpg
+import logging
 from pathlib import Path
 
 
 class AsyncPGDB:
+
+    _logger = logging.getLogger(__name__)
 
     def __init__(self, host, port, database, user, password):
         self.host = host
@@ -40,33 +43,34 @@ class AsyncPGDB:
 
 
     async def init_database(self):
-        sql_folder = Path(__file__).parent / "sql"
-        
-        # Получаем список файлов, сортируем их и выполняем
-        sql_files = sorted(sql_folder.glob("*.sql"))
-        
-        for sql_file in sql_files:
-            async with await self._pool.acquire() as conn:
-                async with conn.transaction():
-                    sql = await sql_file.read_text(encoding='utf-8')
-                    # Выполняем весь файл целиком
-                    await conn.execute(sql)
-                    print(f"Applied {sql_file.name}")
+        try:
+            sql_folder = Path(__file__).parent / "sql"
+            sql_files = sorted(sql_folder.glob("*.sql"))
+            
+            for sql_file in sql_files:
+                async with self._pool.acquire() as conn:
+                    async with conn.transaction():
+                        sql = sql_file.read_text(encoding='utf-8')
+                        await conn.execute(sql)
+                        self._logger.info("Applied: %s", sql_file.name)
+        except Exception as error:
+            self._logger.error("Failed to init database: %s", error)
 
-    async def execute(self, logger, sql_query, *args):
+
+    async def execute(self, sql_query, *args):
         """Выполняем SQL-запросы."""
         conn = await self._pool.acquire()  # Получаем соединение из пула
         try:
             result = await conn.execute(sql_query, *args)
             return result
         except Exception as error:
-            logger.error(f"Ошибка выполнения запроса: {sql_query}, ошибка: {error}")
+            self._logger.error("Failed to execute: %s, error: %s", sql_query, error)
             return False
         finally:
             await self._pool.release(conn)
 
 
-    async def get_rows(self, full_query, logger, params=None):
+    async def get_rows(self, full_query, params=None):
         """
         Универсальная функция для извлечения данных из базы данных.
         Работает как с параметрами (params), так и без них.
@@ -91,7 +95,7 @@ class AsyncPGDB:
             transformed_rows = tuple(t_rows)
             return transformed_rows
         except Exception as error:
-            logger.error(f"Ошибка выполнения запроса: {full_query}, ошибка: {error}")
+            self._logger.error("Failed to execute: %s, error: %s", full_query,error)
             return []
         finally:
             if conn is not None:  # Проверяем, было ли создано активное соединение
@@ -122,14 +126,14 @@ class AsyncPGDB:
                     result = await conn.fetchval(query, *values)
                     results.append(result)
             except Exception as error:
-                print(f"Ошибка вставки данных: {error}")
+                self._logger.error("Failed to insert data: %s", error)
                 continue
             finally:
                 await self._pool.release(conn)      # Освобождаем соединение назад в пул
         return results if len(results) > 1 else results[0]
 
 
-    async def fetch_chunked(self, logger, full_query, chunk_size=10, offset=0, order_condition=None):
+    async def fetch_chunked(self, full_query, chunk_size=10, offset=0, order_condition=None):
         """Извлекает данные из базы данных постранично.
         Используется для больших объемов данных."""
 
@@ -139,13 +143,13 @@ class AsyncPGDB:
             conn = await self._pool.acquire()
             rows = await conn.fetch(paginated_query)
         except Exception as error:
-            logger.error(f"Ошибка выполнения запроса: {paginated_query}, ошибка: {error}")
+            self._logger.error("Failed to execute: %s, error: %s", paginated_query, error)
         finally:
             await self._pool.release(conn)
         return rows
 
 
-    async def get_count(self, logger, sql_query, *args):
+    async def get_count(self, sql_query, *args):
             """
             Выполняем SQL-запросы.
             """
@@ -154,20 +158,20 @@ class AsyncPGDB:
                 result = await conn.fetchval(sql_query, *args)
                 return result
             except Exception as error:
-                logger.error(f"Ошибка выполнения запроса: {sql_query}, ошибка: {error}")
+                self._logger.error("Failed to execute: %s, error: %s", sql_query,error)
                 return False
             finally:
                 await self._pool.release(conn)
 
 
-    async def update_records(self, table, logger, *args):
+    async def update_records(self, table, *args):
         conn = await self._pool.acquire()
         update_fields, conditions = args
         query, values = form_update_query(table, update_fields, conditions)
         try:
             state = await conn.execute(query, *values)
         except Exception as error:
-            logger.error(f"Ошибка выполнения запроса: {query}, ошибка: {error}")
+            self._logger.error("Failed to execute: %s, error: %s", query, error)
             return False
         finally:
             if conn is not None:
@@ -175,14 +179,14 @@ class AsyncPGDB:
         return state
 
 
-    async def del_record(self, table, logger, *args):
+    async def del_record(self, table, *args):
             query = f"DELETE FROM {table} WHERE user_name=$1;"
             args = args
             conn = await self._pool.acquire()
             try:
                 result = await conn.execute(query, *args)
             except Exception as error:
-                logger.error(f"Ошибка выполнения запроса: {query}, ошибка: {error}")
+                self._logger.error("Failed to execute: %s, error: %s", query, error)
                 result = False
             finally:
                 if conn is not None:
