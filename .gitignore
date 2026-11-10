@@ -48,7 +48,8 @@ pyvenv.cfg
 */lib/
 */lib64/
 flexo.server/lib64
-
+__pycache__/
+*.pyc
 
 # --- Docker  ---
 docker-compose.override.yml

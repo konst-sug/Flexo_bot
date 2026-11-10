@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { api } from '../api';
-import { postQuery } from '../api';
+import { api, postQuery } from '../api';
 import AnswerCard from '../components/AnswerCard';
 import IconButton from '../components/IconButton';
 import Select from '../components/Select';
@@ -76,7 +75,9 @@ export default function DashboardPage() {
       };
   
       const answer = await postQuery(payload);
-      setAnswer(answer.text); // или как бэк отдаёт результат
+      setTitle(''); 
+      setFile(null);
+      setAnswer(answer.text);
     } catch (err) {
       setCreateMsg(err.message);
     } finally {
@@ -115,19 +116,19 @@ export default function DashboardPage() {
           <div style={{ display: 'flex', gap: '4px' }}>
             <IconButton
               icon={<img src={RequestIcon} alt="" />}
-              onClick={() => setMode('question')}
+              onClick={() => { setMode('question'); setTitle(''); }}
               title="Вопрос"
               className={mode === 'question' ? 'active' : ''}
             />
             <IconButton
               icon={<img src={MultiTextIcon} alt="" />}
-              onClick={() => setMode('multitext')}
+              onClick={() => { setMode('multitext'); setTitle(''); }}
               title="Мультитекст"
               className={mode === 'multitext' ? 'active' : ''}
             />
             <IconButton
               icon={<img src={PromptPlusIcon} alt="" />}
-              onClick={() => setMode('prompt')}
+              onClick={() => { setMode('prompt'); setTitle(''); }}
               title="Промпт +"
               className={mode === 'prompt' ? 'active' : ''}
             />
@@ -150,7 +151,7 @@ export default function DashboardPage() {
           {mode === 'multitext' && (
             <TextareaCard
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={setTitle}
             />
           )}
   

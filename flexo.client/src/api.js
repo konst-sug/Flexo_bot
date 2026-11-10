@@ -43,9 +43,9 @@ export const api = {
     },
   };
 
-async function postQuery({ content, prompt, file }) {
+export async function postQuery({ content, prompt, file }) {
     const formData = new FormData();
-    formData.append('content', content);
+    formData.append('content', content ?? ''); 
   
     if (prompt) formData.append('prompt', prompt);
     if (file) {
