@@ -42,4 +42,25 @@ export const api = {
       throw new Error('Неверный логин или пароль');
     },
   };
+
+async function postQuery({ content, prompt, file }) {
+    const formData = new FormData();
+    formData.append('content', content);
+  
+    if (prompt) formData.append('prompt', prompt);
+    if (file) {
+      formData.append('file', file, file.name); // бэк получит имя файла и байты
+    }
+  
+    const response = await fetch('/api/query', {
+      method: 'POST',
+      body: formData,
+      // Content-Type НЕ ставим руками — браузер сам добавит с boundary
+    });
+  
+    if (!response.ok) {
+      throw new Error(`Ошибка сервера: ${response.status}`);
+    }
+    return response.json();
+  }
   

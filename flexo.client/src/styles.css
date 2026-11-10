@@ -1,10 +1,46 @@
 * { box-sizing: border-box; }
+:root {
+  /* Дефолтные значения, если тема не загружена */
+  --bg-color: #ffffff;
+  --text-color: #111111;
+  --primary-color: #3b82f6;
+  --panel-shadow-color: rgba(2, 26, 163, 0.218);
+  --font-family: system-ui, -apple-system, sans-serif;
+  --font-size-base: 16px;
+  --border-radius: 8px;
+}
+
+/* Если тема тёмная — переопределяем переменные */
+body.dark-theme {
+  --bg-color: #1e1e21;
+  --text-color: #f3f4f6;
+}
+
 body {
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+}
+
+.panel-shadow {
+  box-shadow: 7px 10px 5px var(--panel-shadow-color);
+  border-radius: var(--border-radius);
+  margin: 10px 10px 0 10px;
+  height: 70px;
+}
+
+h1, h2, h3 {
+  color: var(--primary-color);
+}
+
+
+/* body {
   margin: 0;
   font-family: system-ui, sans-serif;
   background: #f4f5f7;
   color: #222;
-}
+} */
 
 .page-center {
   min-height: 100vh;
@@ -53,11 +89,51 @@ button:disabled { opacity: .6; }
 
 .topbar {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
-  padding: 12px 24px;
+  padding: 5px 15px;
   background: #fff;
-  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+
+.topbar h1 {
+  margin: 0;
+}
+
+.topbar-nav {
+  display: flex;
+  gap: 16px;
+  margin-left: auto;   /* забирает всё свободное место слева, прижимает nav и кнопку вправо */
+}
+
+.topbar-link {
+  color: inherit;
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.topbar-link:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.topbar-link-active {
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+
+.panel-shadow {
+  /* Значения по умолчанию, если бэкенд не прислал данные */
+  --shadow-color: rgba(2, 26, 163, 0.218);
+  --shadow-x: 7px;
+  --shadow-y: 10px;
+  --shadow-blur: 5px;
+  
+  box-shadow: var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-color);
+  margin: 10px 10px 0 10px;
+  height: 70px;
+  border-radius: 5px;
 }
 
 .panels {
@@ -72,6 +148,222 @@ button:disabled { opacity: .6; }
 .list { margin: 10px 0 0; padding-left: 18px; }
 .list li { padding: 4px 0; }
 
+/* ← ДОБАВЛЕНО: проявление тёмного фона */
+.popup-overlay {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* ← ДОБАВЛЕНО: карточка чуть выплывает снизу и проявляется */
+.popup-card {
+  animation: slideUp 0.8s ease-out;
+}
+
+.card textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* Опционально: авто-ресайз без JS */
+textarea[min-rows] {
+  resize: vertical;
+}
+
+.form-column {
+  --shadow-color: rgba(2, 26, 163, 0.218);
+  --shadow-x: 7px;
+  --shadow-y: 10px;
+  --shadow-blur: 5px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 260px;
+  border: 2px solid #d3dbda;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-color);
+}
+
+.form-min {
+  --shadow-color: rgba(2, 26, 163, 0.218);
+  --shadow-x: 7px;
+  --shadow-y: 10px;
+  --shadow-blur: 5px;
+
+  display: flex;
+  
+  width: 160px;
+  border: 2px solid #d3dbda;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-color);
+}
+
+.answer-card {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  color: var(--text);
+  height: 47em;
+  position: relative;
+}
+
+.answer-text {
+  font-size: 16px;
+  line-height: 1.5;
+  white-space: pre-wrap;   /* переносы из ответа сохраняются */
+}
+
+.answer-text.muted {
+  color: var(--text-muted);
+}
+
+.answer-button {
+  position: absolute;
+  bottom: 25px;
+}
+/* MenuWithModal.css */
+.menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 220px;
+}
+
+.menu-item {
+  padding: 12px 16px;
+  text-align: left;
+  border: none;
+  border-radius: 8px;
+  background: #f2f3f5;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background 0.15s;
+}
+
+.menu-item:hover {
+  background: #e4e6ea;
+}
+
+.menu-item.active {
+  background: #d6e4ff;
+  font-weight: 600;
+}
+
+/* --- Боковая панель --- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
+
+.side-panel {
+  position: fixed;
+  top: 102px;
+  right: 3%;
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  box-shadow: -4px 0 16px rgba(0, 0, 0, 0.15);
+  animation: slide-in 0.45s ease;
+
+  /* размеры */
+  width: 46%;         /* md */
+  max-width: 90vw;
+}
+
+.side-panel.sm { width: 320px; }
+.side-panel.lg { width: 560px; }
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.modal-close {
+  border: none;
+  background: none;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  color: #666;
+}
+
+.modal-body {
+  flex: 1;
+  overflow-y: auto; /* если контент не влезает — скролл внутри панели */
+  padding: 20px;
+}
+
+.icon-button {
+  font-size: 45px;
+  background: #f6f7f8f3;
+  padding: 0;          /* убираем внутренние отступы, чтобы картинка заняла всё */
+  overflow: hidden;
+  width: 29%; 
+  height: 30px;
+}
+
+.icon-button-small {
+  font-size: 35px;
+  background: #eef1f7;
+  padding: 0;          /* убираем внутренние отступы, чтобы картинка заняла всё */
+  overflow: hidden;
+  width: 45%;
+}
+
+.theme-icon {
+  height: unset;
+}
+
+.icon-button img,
+.icon-button-small img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain; /* картинка целиком внутри кнопки, ничего не обрезается */
+}
+
+.icon-button.active img {
+  outline: 2px solid #4a90d9; /* подгоните под цвета темы */
+  border-radius: 6px;
+}
+
+@keyframes slide-in {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
 @media (max-width: 720px) {
   .panels { grid-template-columns: 1fr; }
 }
+
+

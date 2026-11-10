@@ -31,7 +31,7 @@ flexo.server/dist/
 flexo.server/.eggs/                
 flexo.server/.*.swp                
 flexo.server/.*.swo
-
+flexo.server/api/database/sql
 
 # ----------------------------------
 .env
@@ -43,6 +43,11 @@ flexo.server/.env.local
 secrets.json
 config/local.yaml
 config/secrets.yaml
+pyvenv.cfg
+*/bin/*
+*/lib/
+*/lib64/
+flexo.server/lib64
 
 
 # --- Docker  ---
