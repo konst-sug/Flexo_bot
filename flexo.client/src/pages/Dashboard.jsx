@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../api';
+import { postQuery } from '../api';
 import AnswerCard from '../components/AnswerCard';
 import IconButton from '../components/IconButton';
 import Select from '../components/Select';
@@ -20,6 +21,7 @@ export default function DashboardPage() {
   const [answer, setAnswer] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [mode, setMode] = useState('question'); // 'question' | 'multitext' | 'prompt'
+  const [file, setFile] = useState(null);  
 
   // после успешного ответа от pipeline:
   const selectedPrompt = '';
@@ -38,7 +40,7 @@ export default function DashboardPage() {
 
   useEffect(() => { loadItems(); }, []);
 
-  async function handleCreate(e) {
+  async function handleSearch(e) {
     e.preventDefault();
     if (!title.trim()) {
       setCreateMsg('Введите название');
@@ -61,12 +63,33 @@ export default function DashboardPage() {
     it.title?.toLowerCase().includes(query.toLowerCase())
   );
 
+  const handleCreate = async (e) => {
+    e.preventDefault();
+    setCreating(true);
+    setCreateMsg('');
+  
+    try {
+      const payload = {
+        content: title,
+        prompt: mode === 'prompt' ? selectedPrompt : null,
+        file: mode === 'prompt' ? file : null,
+      };
+  
+      const answer = await postQuery(payload);
+      setAnswer(answer.text); // или как бэк отдаёт результат
+    } catch (err) {
+      setCreateMsg(err.message);
+    } finally {
+      setCreating(false);
+    }
+  };
+  
   return (
     <div className="panels">
       {/* Панель 1: создание элемента */}
-      <section className="card">
-      <h2>Поиск</h2>
-        <form onSubmit={(e) => e.preventDefault()}>
+      <section className="card answer-card">
+        <h2>Поиск</h2>
+        <form onSubmit={handleSearch}>
           <label>
             Поиск в хранилище
             <input
@@ -85,75 +108,80 @@ export default function DashboardPage() {
             <li key={it.id ?? it.title}>{it.title}</li>
           ))}
         </ul>
-
-        {/* --- ИЗМЕНЕНО: заголовок с тремя иконками справа --- */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <h2>Новый запрос</h2>
-        <div style={{ display: 'flex', gap: '4px' }}>
-          <IconButton
-            icon={<img src={RequestIcon}/>}
-            onClick={() => setMode('question')}
-            title="Вопрос"
-            className={mode === 'question' ? 'active' : ''}
-          />
-          <IconButton
-            icon={<img src={MultiTextIcon}/>}
-            onClick={() => setMode('multitext')}
-            title="Мультитекст"
-            className={mode === 'multitext' ? 'active' : ''}
-          />
-          <IconButton
-            icon={<img src={PromptPlusIcon}/>}
-            onClick={() => setMode('prompt')}
-            title="Промпт +"
-            className={mode === 'prompt' ? 'active' : ''}
-          />
+  
+        {/* Заголовок с тремя иконками справа */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <h2>Новый запрос</h2>
+          <div style={{ display: 'flex', gap: '4px' }}>
+            <IconButton
+              icon={<img src={RequestIcon} alt="" />}
+              onClick={() => setMode('question')}
+              title="Вопрос"
+              className={mode === 'question' ? 'active' : ''}
+            />
+            <IconButton
+              icon={<img src={MultiTextIcon} alt="" />}
+              onClick={() => setMode('multitext')}
+              title="Мультитекст"
+              className={mode === 'multitext' ? 'active' : ''}
+            />
+            <IconButton
+              icon={<img src={PromptPlusIcon} alt="" />}
+              onClick={() => setMode('prompt')}
+              title="Промпт +"
+              className={mode === 'prompt' ? 'active' : ''}
+            />
+          </div>
         </div>
-      </div>
-       
-      {/* --- ИЗМЕНЕНО: показываем только активный блок --- */}
-      {mode === 'question' && (
+  
+        {/* Одна форма на все режимы, внутри — условные блоки */}
         <form onSubmit={handleCreate}>
-          <label>
-            Введите запрос
-            <input
+          {mode === 'question' && (
+            <label>
+              Введите запрос
+              <input
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Например, напиши функцию на Elixir"
+              />
+            </label>
+          )}
+  
+          {mode === 'multitext' && (
+            <TextareaCard
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Например, напиши функцию на Elixir"
             />
-          </label>
-        </form>
-      )}
-
-      {mode === 'multitext' && (
-        <TextareaCard
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-      )}
-
-      {mode === 'prompt' && (
-        <div>
-          <Select
-            label="Промпт"
-            name="prompt"
-            value={selectedPrompt}
-            onChange={(e) => setSelectedPrompt(e.target.value)}
-            options={promptOptions} // массив [{ value, label }]
-          />
-          <FilePickCard />
-        </div>
-      )}
-      <button type="submit" disabled={creating}>
+          )}
+  
+          {mode === 'prompt' && (
+            <div>
+              <Select
+                label="Промпт"
+                name="prompt"
+                value={selectedPrompt}
+                onChange={(e) => setSelectedPrompt(e.target.value)}
+                options={promptOptions} // массив [{ value, label }]
+              />
+              <FilePickCard
+                title="Прикрепить файл"
+                file={file}
+                onSelect={setFile}      // ← вот этого не хватает
+                onClear={() => setFile(null)}
+              />
+            </div>
+          )}
+          <button  className="answer-button" type="submit" disabled={creating}>
             {creating ? 'Сохраняем…' : 'Отправить'}
           </button>
-      {createMsg && <p className="hint">{createMsg}</p>}
-    </section>
-
-      {/* Панель 2: результат*/}
+          {createMsg && <p className="hint">{createMsg}</p>}
+        </form>
+      </section>
+  
+      {/* Панель 2: результат */}
       <section className="card">
         <AnswerCard text={answer} isLoading={isLoading} />
       </section>
     </div>
   );
-}
+}  

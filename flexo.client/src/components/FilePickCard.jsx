@@ -4,13 +4,13 @@ export default function FilePickCard({ title, file, onSelect, onClear, onSubmit,
   const inputRef = useRef(null);
 
   function handleClick() {
-    inputRef.current?.click();   // открывает системный диалог выбора файла
+    inputRef.current?.click();
   }
 
   function handleChange(e) {
     const picked = e.target.files[0];
-    if (picked) onSelect(picked);
-    e.target.value = '';         // сброс: повторный выбор того же файла тоже сработает
+    if (picked) onSelect?.(picked);
+    e.target.value = '';
   }
 
   return (
@@ -20,14 +20,14 @@ export default function FilePickCard({ title, file, onSelect, onClear, onSubmit,
       <input
         ref={inputRef}
         type="file"
-        accept={accept}          // например "audio/wav,.wav" или ".pdf,.docx"
+        accept={accept}
         style={{ display: 'none' }}
         onChange={handleChange}
       />
 
       {file ? (
         <p className="hint">
-          Выбран: {file.name} ({Math.round(file.size / 1024)} КБ)
+          Выбран: <strong>{file.name}</strong> ({Math.round(file.size / 1024)} КБ)
         </p>
       ) : (
         <p className="hint">Файл не выбран</p>
@@ -43,7 +43,7 @@ export default function FilePickCard({ title, file, onSelect, onClear, onSubmit,
         )}
 
         {file && onSubmit && (
-          <button type="button" onClick={() => onSubmit(file)}>Обработать</button>
+          <button type="button" onClick={() => onSubmit?.(file)}>Обработать</button>
         )}
       </div>
     </section>

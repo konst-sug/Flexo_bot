@@ -212,6 +212,7 @@ textarea[min-rows] {
   border: 1px solid var(--panel-border);
   color: var(--text);
   height: 47em;
+  position: relative;
 }
 
 .answer-text {
@@ -222,6 +223,11 @@ textarea[min-rows] {
 
 .answer-text.muted {
   color: var(--text-muted);
+}
+
+.answer-button {
+  position: absolute;
+  bottom: 25px;
 }
 /* MenuWithModal.css */
 .menu-list {
