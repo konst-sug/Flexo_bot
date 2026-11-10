@@ -1,4 +1,7 @@
 import IconButton from "./IconButton";
+import Copyicon from '../assets/icons/mdi-icons/mdi--content-copy.svg'
+import ExxportAllicon from '../assets/icons/mdi-icons/mdi--content-save-all-outline.svg'
+import Exporticon from '../assets/icons/mdi-icons/mdi--content-save-outline.svg'
 
 export default function AnswerCard({ title = 'Ответ', text, isLoading }) {
   return (
@@ -8,19 +11,19 @@ export default function AnswerCard({ title = 'Ответ', text, isLoading }) {
       <h2>{title}</h2>
       <div style={{ display: 'flex', gap: '4px' }}>
                 <IconButton
-                  icon="▶️"
+                  icon={<img src={Copyicon}/>}
                   onClick={() => setMode('question')}
                   title="Копировать"
                   className="icon-button-small"
                 />
                 <IconButton
-                  icon="🗑️"
+                  icon={<img src={Exporticon}/>}
                   onClick={() => setMode('multitext')}
                   title="Экспорт"
                   className="icon-button-small"
                 />
                 <IconButton
-                  icon="📄"
+                  icon={<img src={ExxportAllicon}/>}
                   onClick={() => setMode('prompt')}
                   title="Экспорт чата"
                   className="icon-button-small"

@@ -1,5 +1,7 @@
 // src/components/NotificationsForm.jsx
 import { useState } from 'react';
+import Toggle from './Toggle';
+import Select from './Select';
 
 const sampleNotifications = [
   { id: 1, title: 'Новый комментарий', type: 'comment', read: false },
@@ -9,26 +11,50 @@ const sampleNotifications = [
 
 export default function NotificationsForm() {
   const [filter, setFilter] = useState('all');
+  const [isAdvanced, setIsAdvanced] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+  const [folder, setFolder] = useState(false);
 
   const filtered =
     filter === 'all'
       ? sampleNotifications
       : sampleNotifications.filter((n) => n.type === filter);
+  const handleChange = (e) => {};
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <div style={{ display: 'flex', gap: '12px' }}>
-        <span>Фильтр:</span>
-        <select
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          style={{ padding: '6px 8px' }}
-        >
-          <option value="all">Все</option>
-          <option value="comment">Комментарии</option>
-          <option value="system">Система</option>
-          <option value="reminder">Напоминания</option>
-        </select>
+      <h3>Место хранения файлов</h3>
+      <div className='form-column'>
+      <div>
+        <Select
+            label="Путь к хранилищу"
+            name="repo"
+            value={folder}                    // см. примечание ниже
+            onChange={handleChange}
+            style={{ padding: '8px' }}
+            options={[
+              { value: "ru", label: "Русский" },
+              { value: "en", label: "English" },
+            ]}
+        />
+        </div>
+
+        
+      </div>
+      <h3>Хранилище Данных</h3>
+      <div style={{ display: 'flex', gap: '36px' }}>
+        <div className='form-min'>  
+          <Toggle
+            isActive={isAdvanced}
+            onToggle={setIsAdvanced}
+            label={isAdvanced ? 'PostgreSQL: on' : 'PostgreSQL: off'}
+          /></div>
+        <div className='form-min'> 
+          <Toggle
+            isActive={isActive}
+            onToggle={setIsActive}
+            label={isActive ? 'Redis: on' : 'Redis: off'}
+          /></div>
       </div>
 
       <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
@@ -50,6 +76,17 @@ export default function NotificationsForm() {
           <li>Нет уведомлений по выбранному фильтру</li>
         )}
       </ul>
+      <span>Фильтр:</span>
+        <select
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          style={{ padding: '6px 8px' }}
+        >
+          <option value="all">Все</option>
+          <option value="comment">Комментарии</option>
+          <option value="system">Система</option>
+          <option value="reminder">Напоминания</option>
+        </select>
     </div>
   );
 }

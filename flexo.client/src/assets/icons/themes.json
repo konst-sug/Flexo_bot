@@ -1,0 +1,106 @@
+{
+ "морской":   
+    {
+        "descr": "темно синий и янтарь",
+        "basic": "#1f4e8c",
+        "accent": "#c47f12",
+        "page-background":"#f2f5f9",
+        "card-background": "#ffffff",
+        "menu-background": "#173a68",
+        "text": "#1b2635",
+        "error": "#a4262c",
+        "success": "#2f7a4d",
+        "warning": "#9a6700"
+    },
+ "лес":   
+    {
+        "descr": "хвойный зеленый и медь",
+        "basic": "#2f5d3a",
+        "accent": "#b5651d",
+        "page-background":"#f3f5f0",
+        "card-background": "#ffffff",
+        "menu-background": "#22432a",
+        "text": "#1f2a22",
+        "error": "#a4262c",
+        "success": "#2f7a4d",
+        "warning": "#9a6700"
+    },
+ "бордо":   
+    {
+        "descr": "винный и старое золото",
+        "basic": "#7a2335",
+        "accent": "#a87a1e",
+        "page-background":"#f7f3f3",
+        "card-background": "#ffffff",
+        "menu-background": "#5a1927",
+        "text": "#2b1d20",
+        "error": "#a4262c",
+        "success": "#2f7a4d",
+        "warning": "#9a6700"
+    },
+ "графит":   
+    {
+        "descr": "нейтральный серый и бирюза",
+        "basic": "#3d4852",
+        "accent": "#1f7f74",
+        "page-background":"#f4f4f5",
+        "card-background": "#ffffff",
+        "menu-background": "#2a3138",
+        "text": "#1e2328",
+        "error": "#a4262c",
+        "success": "#2f7a4d",
+        "warning": "#9a6700"
+    },
+ "сирень":   
+    {
+        "descr": "приглушенный фиолетовый и шафран",
+        "basic": "#5b4a8b",
+        "accent": "#b7700c",
+        "page-background":"#f6f4fa",
+        "card-background": "#ffffff",
+        "menu-background": "#3e3266",
+        "text": "#231f30",
+        "error": "#a4262c",
+        "success": "#2f7a4d",
+        "warning": "#9a6700"
+    },
+ "ночь":   
+    {
+        "descr": "темная тема",
+        "basic": "#7cc0d1",
+        "accent": "#e0a84a",
+        "page-background":"#141b20",
+        "card-background": "#1d262d",
+        "menu-background": "#0e1418",
+        "text": "#e3eaee",
+        "error": "#ff8a80",
+        "success": "#7bd88f",
+        "warning": "#f2c26b"
+    },
+ "мята":   
+    {
+        "descr": "глубокия мятный и сливки",
+        "basic": "#1f6b5c",
+        "accent": "#8a3b75",
+        "page-background":"#f2f7f5",
+        "card-background": "#ffffff",
+        "menu-background": "#174f45",
+        "text": "#1b2a26",
+        "error": "#a4262c",
+        "success": "#2f7a4d",
+        "warning": "#9a6700"
+    },
+ "полночь":   
+    {
+        "descr": "темная: индиго и мягкое золото",
+        "basic": "#9db4ff",
+        "accent": "#f0b35a",
+        "page-background":"#121528",
+        "card-background": "#1b1f36",
+        "menu-background": "#0c0e1c",
+        "text": "#e4e8ff",
+        "error": "#a4262c",
+        "success": "#7fd6a1",
+        "warning": "#f2c26b"
+    }
+}

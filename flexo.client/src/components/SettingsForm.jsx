@@ -2,7 +2,10 @@
 import { useState } from 'react';
 import Select from './Select';
 import IconButton from './IconButton';
-import SandTheme from '../assets/icons/sand.png';
+import BordoTheme from '../assets/img/bordo.png';
+import NightTheme from '../assets/img/night.png';
+import MintTheme from '../assets/img/mint.png';
+import GraphiteTheme from '../assets/img/graphite.png';
 
 export default function SettingsForm() {
   const [settings, setSettings] = useState({
@@ -22,7 +25,8 @@ export default function SettingsForm() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       <div>
-        <label style={{ fontWeight: 'bold' }}>Тема интерфейса</label>
+      <h3>Шрифт системы</h3>
+        {/* <label style={{ fontWeight: 'bold' }}>Тема интерфейса</label> */}
         <select
           name="theme"
           value={settings.theme}
@@ -34,7 +38,7 @@ export default function SettingsForm() {
         </select>
       </div>
 
-      <div>
+      {/* <div>
       <Select
           label="Хранилище"
           name="repo"
@@ -46,14 +50,14 @@ export default function SettingsForm() {
             { value: "en", label: "English" },
           ]}
       />
-      </div>
-      
-      <label style={{ fontWeight: 'bold' }}>Тема интерфейса</label>
+      </div> */}
+      <h3>Тема интерфейса</h3>
+      {/* <label style={{ fontWeight: 'bold' }}>Тема интерфейса</label> */}
       <div style={{ display: 'flex', gap: '8px' }}>
-        <IconButton icon={<img src={SandTheme}/>} onClick={handleChange} title="Редактировать" />
-        <IconButton icon="📄" onClick={handleChange} title="Копировать" />
-        <IconButton icon="🗑️" onClick={handleChange} title="Удалить" />
-        <IconButton icon="▶️" onClick={handleChange} title="Запустить" />
+        <IconButton icon={<img src={BordoTheme}/>} className='theme-icon' onClick={handleChange} title="Редактировать" />
+        <IconButton icon={<img src={NightTheme}/>} className='theme-icon' onClick={handleChange} title="Копировать" />
+        <IconButton icon={<img src={MintTheme}/>} className='theme-icon' onClick={handleChange} title="Удалить" />
+        <IconButton icon={<img src={GraphiteTheme}/>} className='theme-icon' onClick={handleChange} title="Запустить" />
       </div>
 
       <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>

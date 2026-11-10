@@ -20,8 +20,10 @@ export default function ProfileForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around'}}>
+    <form onSubmit={handleSubmit} className='form-column'>
       <div>
+      <h2>Личные данные</h2>
         <label>Имя</label>
         <input
           name="firstName"
@@ -53,5 +55,41 @@ export default function ProfileForm() {
         Сохранить профиль
       </button>
     </form>
+
+    <form onSubmit={handleSubmit} className='form-column'>
+      <div>
+      <h2>Сменить пароль</h2>
+        <label>Текущий пароль</label>
+        <input
+          name="firstName"
+          value={formData.firstName}
+          onChange={handleChange}
+          style={{ width: '100%', padding: '8px', border: '1px solid #ccc' }}
+        />
+      </div>
+      <div>
+        <label>Новый пароль</label>
+        <input
+          name="lastName"
+          value={formData.lastName}
+          onChange={handleChange}
+          style={{ width: '100%', padding: '8px', border: '1px solid #ccc' }}
+        />
+      </div>
+      <div>
+        <label>Повторите новый пароль</label>
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          style={{ width: '100%', padding: '8px', border: '1px solid #ccc' }}
+        />
+      </div>
+      <button type="submit" style={{ padding: '10px 16px', background: '#007bff', color: '#fff' }}>
+        Сохранить профиль
+      </button>
+    </form>
+    </div>
   );
 }

@@ -176,6 +176,37 @@ textarea[min-rows] {
   resize: vertical;
 }
 
+.form-column {
+  --shadow-color: rgba(2, 26, 163, 0.218);
+  --shadow-x: 7px;
+  --shadow-y: 10px;
+  --shadow-blur: 5px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 260px;
+  border: 2px solid #d3dbda;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-color);
+}
+
+.form-min {
+  --shadow-color: rgba(2, 26, 163, 0.218);
+  --shadow-x: 7px;
+  --shadow-y: 10px;
+  --shadow-blur: 5px;
+
+  display: flex;
+  
+  width: 160px;
+  border: 2px solid #d3dbda;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-color);
+}
+
 .answer-card {
   background: var(--panel-bg);
   border: 1px solid var(--panel-border);
@@ -277,21 +308,27 @@ textarea[min-rows] {
 
 .icon-button {
   font-size: 45px;
-  background: #99b7e7;
+  background: #f6f7f8f3;
   padding: 0;          /* убираем внутренние отступы, чтобы картинка заняла всё */
   overflow: hidden;
-  width: 29%;
+  width: 29%; 
+  height: 30px;
 }
 
 .icon-button-small {
   font-size: 35px;
-  background: #99b7e7;
+  background: #eef1f7;
   padding: 0;          /* убираем внутренние отступы, чтобы картинка заняла всё */
   overflow: hidden;
   width: 45%;
 }
 
-.icon-button img {
+.theme-icon {
+  height: unset;
+}
+
+.icon-button img,
+.icon-button-small img {
   width: 100%;
   height: 100%;
   display: block;
@@ -302,6 +339,7 @@ textarea[min-rows] {
   outline: 2px solid #4a90d9; /* подгоните под цвета темы */
   border-radius: 6px;
 }
+
 @keyframes slide-in {
   from { transform: translateX(100%); }
   to   { transform: translateX(0); }

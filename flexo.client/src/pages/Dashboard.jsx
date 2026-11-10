@@ -5,6 +5,9 @@ import IconButton from '../components/IconButton';
 import Select from '../components/Select';
 import TextareaCard from '../components/TextAreaCard';
 import FilePickCard from '../components/FilePickCard';
+import RequestIcon from '../assets/icons/mdi-icons/mdi--pencil-outline.svg'
+import MultiTextIcon from '../assets/icons/mdi-icons/mdi--text-box-edit-outline.svg'
+import PromptPlusIcon from '../assets/icons/mdi-icons/mdi--view-dashboard-edit-outline.svg'
 
 export default function DashboardPage() {
   const [items, setItems] = useState([]);
@@ -88,19 +91,19 @@ export default function DashboardPage() {
         <h2>Новый запрос</h2>
         <div style={{ display: 'flex', gap: '4px' }}>
           <IconButton
-            icon="▶️"
+            icon={<img src={RequestIcon}/>}
             onClick={() => setMode('question')}
             title="Вопрос"
             className={mode === 'question' ? 'active' : ''}
           />
           <IconButton
-            icon="🗑️"
+            icon={<img src={MultiTextIcon}/>}
             onClick={() => setMode('multitext')}
             title="Мультитекст"
             className={mode === 'multitext' ? 'active' : ''}
           />
           <IconButton
-            icon="📄"
+            icon={<img src={PromptPlusIcon}/>}
             onClick={() => setMode('prompt')}
             title="Промпт +"
             className={mode === 'prompt' ? 'active' : ''}
