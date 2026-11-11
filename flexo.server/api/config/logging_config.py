@@ -42,13 +42,21 @@ LOGGING_CONFIG = {
             },
     },
     
-    'loggers': {
-        'api': {'level': 'ERROR', 'propagate': True}, 
+        'loggers': {
+        'api': {'level': 'INFO', 'propagate': True},
         'app': {'level': 'INFO', 'propagate': True},
         'security': {'level': 'INFO', 'propagate': True},
+        'query_processor': {'level': 'INFO', 'propagate': True},
+
+        # шумные сторонние библиотеки — заглушить до WARNING
+        'httpx': {'level': 'INFO', 'propagate': True},
+        'httpcore': {'level': 'WARNING', 'propagate': True},
+        'urllib3': {'level': 'WARNING', 'propagate': True},
+        'uvicorn.access': {'level': 'WARNING', 'propagate': False},
     },
     'root': {
-        'level': 'DEBUG',
+        'level': 'INFO',
         'handlers': ['file', 'console']
     },
+
 }

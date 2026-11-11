@@ -3,6 +3,15 @@ import patoolib
 from pathlib import Path
 from os import path, walk, remove
 
+EXTENSION_PATTERNS = {
+    'zip': '*.[zZ][iI][pP]',
+    'rar': '*.[rR][aA][rR]',
+    '7z':  '*.[7][zZ]',
+    'tar': '*.[tT][aA][rR]',
+    'gz':  '*.[gG][zZ]',
+    'gzip': '*.[gG][zZ][iI][pP]',
+    'xz':  '*.[xX][zZ]'
+}
 
 class ArchiveExtractor:
     def __init__(self, outdir: str = None):

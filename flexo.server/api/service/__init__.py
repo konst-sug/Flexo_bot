@@ -3,21 +3,11 @@ import logging
 from concurrent.futures import ThreadPoolExecutor
 from glob import glob
 
-from .extractor import ArchiveExtractor, path
+from .extractor import ArchiveExtractor, path, EXTENSION_PATTERNS 
 from .query_processor import QueryProcessor
 
 
 logger = logging.getLogger(__name__)
-
-EXTENSION_PATTERNS = {
-    'zip': '*.[zZ][iI][pP]',
-    'rar': '*.[rR][aA][rR]',
-    '7z':  '*.[7][zZ]',
-    'tar': '*.[tT][aA][rR]',
-    'gz':  '*.[gG][zZ]',
-    'gzip': '*.[gG][zZ][iI][pP]',
-    'xz':  '*.[xX][zZ]'
-}
 
 # Executor живёт на уровне модуля и создаётся один раз,
 # а не при каждом запросе

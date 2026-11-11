@@ -45,7 +45,7 @@ class AppConfig:
         port=int(os.getenv("REDIS_PORT", 6379))
     )
     
-    tg: AccessToken = AccessToken(
+    llm: AccessToken = AccessToken(
         api_token=os.getenv("API_TOKEN", None),
         chat=os.getenv("CHAT", "")
     )

@@ -1,1 +1,1 @@
-from .schemas import QueryResult
+from .schemas import QueryResult, QueryInput

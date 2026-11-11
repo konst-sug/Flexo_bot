@@ -2,19 +2,17 @@
 import logging
 import asyncio
 
-from contextlib import asynccontextmanager
 from typing import Optional
-from fastapi import FastAPI, Request, Response, File, UploadFile, Depends, Form
+from contextlib import asynccontextmanager
 from fastapi.responses import JSONResponse
-#from watchdog.observers.polling import PollingObserver
+from fastapi import FastAPI, Request, Response, File, UploadFile, Depends, Form
 from api.security import mySecurity, create_access_token, authorized, registration_check
-from api import db
-from api.service import universal_extract_docs, shutdown_executor
-from api.models import QueryResult
-from api.service import QueryProcessor
+from api import db, app_config
+from api.service import QueryProcessor,universal_extract_docs, shutdown_executor
+from api.models import QueryResult, QueryInput
 
+#from watchdog.observers.polling import PollingObserver
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.WARNING)
 
 users_json = 'users.json'
 users_dict = []
@@ -91,8 +89,28 @@ async def registration_page(request: Request):
 async def logout_user(request: Request):
     pass
 
-
 @app.post("/api/query")
+async def generate_text(content: str = Form(None),
+    prompt: Optional[str] = Form(None),
+    file: Optional[UploadFile] = File(None)):
+    query_service = QueryProcessor('yandexgpt-lite',app_config.llm.api_token, app_config.llm.chat)
+    user_prompt = content
+    
+    query_input = QueryInput(content=content, prompt=prompt, file=file)
+    result = await query_service.route_by_content_type(query_input)
+    content_dict = {
+        "query": content,
+        "prompt": prompt,
+        "file": file
+    }
+    result = await query_service.route_by_content_type(content_dict)
+    
+    result = await query_service.call_yandex_model(user_prompt)
+    
+    return {"text": result}
+
+
+@app.post("/api/query1")
 async def query(
     content: str = Form(None),
     prompt: Optional[str] = Form(None),
@@ -124,12 +142,12 @@ async def query(
 
 @app.post("/query", response_model=QueryResult)
 async def query(
-    content: str = Form(...),
+    content: str = Form(None),
     prompt: Optional[str] = Form(None),
     file: Optional[UploadFile] = File(None),
 ) -> QueryResult:
     file_bytes = await file.read() if file is not None else None
-    query_service = QueryProcessor()
+    query_service = QueryProcessor(app_config.llm.api_token, app_config.llm.chat)
 
     return await query_service.process_query(
         content=content,
@@ -138,3 +156,4 @@ async def query(
         file_type=file.content_type if file else None,
         file_bytes=file_bytes,
     )
+
