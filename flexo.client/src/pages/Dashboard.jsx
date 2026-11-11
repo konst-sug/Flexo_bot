@@ -18,6 +18,7 @@ export default function DashboardPage() {
   const [creating, setCreating] = useState(false);
 
   const [answer, setAnswer] = useState('');
+  const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [mode, setMode] = useState('question'); // 'question' | 'multitext' | 'prompt'
   const [file, setFile] = useState(null);  

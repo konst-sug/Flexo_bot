@@ -1,11 +1,17 @@
+import useTypewriter from "../hooks/useTypewriter";
 import IconButton from "./IconButton";
 import Copyicon from '../assets/icons/mdi-icons/mdi--content-copy.svg'
 import ExxportAllicon from '../assets/icons/mdi-icons/mdi--content-save-all-outline.svg'
 import Exporticon from '../assets/icons/mdi-icons/mdi--content-save-outline.svg'
 
-export default function AnswerCard({ title = 'Ответ', text, isLoading }) {
+// добавлен prop role, всё остальное без изменений
+export default function AnswerCard({ title = 'Ответ', text, isLoading, role = 'assistant' }) {
+  const shownText = useTypewriter(role === 'assistant' ? text : text); // печатает только ответ — см. примечание ниже
+  const isUser = role === 'user';
+
   return (
-    <section className="card answer-card">
+    // к классу добавили модификатор, остальная разметка та же
+    <section className={`card answer-card ${isUser ? 'answer-card--user' : 'answer-card--assistant'}`}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
        
       <h2>{title}</h2>
@@ -32,10 +38,11 @@ export default function AnswerCard({ title = 'Ответ', text, isLoading }) {
       {isLoading ? (
         <p className="answer-text muted">Обрабатываем…</p>
       ) : text ? (
-        <p className="answer-text">{text}</p>
+        <p className="answer-text">{shownText}</p>
       ) : (
         <p className="answer-text muted">Здесь появится ответ ассистента</p>
       )}
     </section>
   );
 }
+
