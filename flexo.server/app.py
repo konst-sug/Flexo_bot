@@ -7,8 +7,8 @@ from contextlib import asynccontextmanager
 from fastapi.responses import JSONResponse
 from fastapi import FastAPI, Request, Response, File, UploadFile, Depends, Form
 from api.security import mySecurity, create_access_token, authorized, registration_check
-from api import db, app_config
-from api.service import QueryProcessor,universal_extract_docs, shutdown_executor
+from api import db, app_config, shutdown
+from api.service import QueryProcessor
 from api.models import QueryResult, QueryInput
 
 #from watchdog.observers.polling import PollingObserver
@@ -37,7 +37,7 @@ async def lifespan(app: FastAPI):
 
     await db.disconnect()
 
-    await shutdown_executor()
+    await shutdown()
     logger.info("🛑 Stopping services...")
     # observer.stop()
     # observer.join()
@@ -93,19 +93,18 @@ async def logout_user(request: Request):
 async def generate_text(content: str = Form(None),
     prompt: Optional[str] = Form(None),
     file: Optional[UploadFile] = File(None)):
-    query_service = QueryProcessor('yandexgpt-lite',app_config.llm.api_token, app_config.llm.chat)
-    user_prompt = content
-    
+    query_service = QueryProcessor('yandexgpt-5-lite',app_config.llm.api_token, app_config.llm.chat)
+
     query_input = QueryInput(content=content, prompt=prompt, file=file)
     result = await query_service.route_by_content_type(query_input)
-    content_dict = {
-        "query": content,
-        "prompt": prompt,
-        "file": file
-    }
-    result = await query_service.route_by_content_type(content_dict)
+    # content_dict = {
+    #     "query": content,
+    #     "prompt": prompt,
+    #     "file": file aliceai-llm
+    # }
+    # result = await query_service.route_by_content_type(content_dict)
     
-    result = await query_service.call_yandex_model(user_prompt)
+    #result = await query_service.call_yandex_model(user_prompt)
     
     return {"text": result}
 

@@ -32,6 +32,7 @@ flexo.server/.eggs/
 flexo.server/.*.swp                
 flexo.server/.*.swo
 flexo.server/api/database/sql
+flexo.server/logs/
 
 # ----------------------------------
 .env
