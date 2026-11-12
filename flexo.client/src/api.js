@@ -41,6 +41,36 @@ export const api = {
       }
       throw new Error('Неверный логин или пароль');
     },
+    async register({ firstName, lastName, email, password }) {
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          first_name: firstName,
+          last_name: lastName,
+          email,
+          password,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.detail || `Ошибка сервера: ${res.status}`);
+      }
+      return res.json();
+    },
+    
+    async resetPassword(email) {
+      const res = await fetch('/api/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.detail || `Ошибка сервера: ${res.status}`);
+      }
+      return res.json();
+    },
   };
 
 export async function postQuery({ content, prompt, file }) {
@@ -63,4 +93,7 @@ export async function postQuery({ content, prompt, file }) {
     }
     return response.json();
   }
+
+ 
+  
   

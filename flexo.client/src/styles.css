@@ -32,9 +32,16 @@ body {
 
 h1, h2, h3 {
   color: var(--primary-color);
+  margin-top: 3px;
 }
 
+.select-wrapper {
+  width: 165px;
+}
 
+.select-input {
+  height: 30px;
+}
 /* body {
   margin: 0;
   font-family: system-ui, sans-serif;
@@ -52,10 +59,15 @@ h1, h2, h3 {
 .card {
   background: #fff;
   border-radius: 12px;
-  padding: 24px;
+  padding: 14px;
   box-shadow: 0 2px 10px rgba(0,0,0,.08);
   width: 100%;
-  max-width: 380px;
+  max-width: 420px;
+}
+
+.card-actions {
+  display: flex;
+ justify-content: space-between;
 }
 
 .card label {
@@ -145,7 +157,7 @@ button:disabled { opacity: .6; }
 }
 .panels .card { max-width: none; }
 
-.list { margin: 10px 0 0; padding-left: 18px; }
+.list { margin: 5px 0 0; padding-left: 18px; display: none;}
 .list li { padding: 4px 0; }
 
 /* ← ДОБАВЛЕНО: проявление тёмного фона */
@@ -199,7 +211,6 @@ textarea[min-rows] {
   --shadow-blur: 5px;
 
   display: flex;
-  
   width: 160px;
   border: 2px solid #d3dbda;
   padding: 10px;
@@ -211,7 +222,7 @@ textarea[min-rows] {
   background: var(--panel-bg);
   border: 1px solid var(--panel-border);
   color: var(--text);
-  height: 47em;
+  height: 50em;
   position: relative;
 
   display: flex;
@@ -227,6 +238,21 @@ textarea[min-rows] {
   flex: 1;          /* занимает всё свободное место внутри карточки */
   min-height: 0;    /* без этого overflow-y во flex не работает */
   overflow-y: auto; /* а вот тут появляется скролл */
+}
+
+.card-text {
+  font-size: 16px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  position: absolute;
+  overflow-y: auto; /* а вот тут появляется скролл */
+  bottom: 67px;
+  min-height: 23%;
+  overflow-y: auto;
+  border: 1px solid #d3cdcd;
+  background: #fcfbfb;
+  border-radius: 5px;
+  width: 95%;
 }
 
 .answer-button {

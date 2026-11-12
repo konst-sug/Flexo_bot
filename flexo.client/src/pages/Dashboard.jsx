@@ -114,18 +114,19 @@ export default function DashboardPage() {
         {/* Заголовок с тремя иконками справа */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <h2>Новый запрос</h2>
+          <Select
+                label="Промпт"
+                name="prompt"
+                value={selectedPrompt}
+                onChange={(e) => setSelectedPrompt(e.target.value)}
+                options={promptOptions} // массив [{ value, label }]
+              />
           <div style={{ display: 'flex', gap: '4px' }}>
             <IconButton
               icon={<img src={RequestIcon} alt="" />}
               onClick={() => { setMode('question'); setTitle(''); }}
               title="Вопрос"
               className={mode === 'question' ? 'active' : ''}
-            />
-            <IconButton
-              icon={<img src={MultiTextIcon} alt="" />}
-              onClick={() => { setMode('multitext'); setTitle(''); }}
-              title="Мультитекст"
-              className={mode === 'multitext' ? 'active' : ''}
             />
             <IconButton
               icon={<img src={PromptPlusIcon} alt="" />}
@@ -149,22 +150,12 @@ export default function DashboardPage() {
             </label>
           )}
   
-          {mode === 'multitext' && (
-            <TextareaCard
+          {mode === 'prompt' && (
+            <div>
+              <TextareaCard
               value={title}
               onChange={setTitle}
             />
-          )}
-  
-          {mode === 'prompt' && (
-            <div>
-              <Select
-                label="Промпт"
-                name="prompt"
-                value={selectedPrompt}
-                onChange={(e) => setSelectedPrompt(e.target.value)}
-                options={promptOptions} // массив [{ value, label }]
-              />
               <FilePickCard
                 title="Прикрепить файл"
                 file={file}
@@ -178,6 +169,7 @@ export default function DashboardPage() {
           </button>
           {createMsg && <p className="hint">{createMsg}</p>}
         </form>
+        <div className="card-text">text</div>
       </section>
   
       {/* Панель 2: результат */}
