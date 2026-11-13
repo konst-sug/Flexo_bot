@@ -58,7 +58,6 @@ export const api = {
       }
       return res.json();
     },
-    
     async resetPassword(email) {
       const res = await fetch('/api/reset-password', {
         method: 'POST',

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext';
 import { api } from '../api';
 
 export default function LoginPage1() {
@@ -9,11 +10,11 @@ export default function LoginPage1() {
   const [loading, setLoading] = useState(false);
   const [isInfoOpen, setIsInfoOpen] = useState(false);
 
-  // ← ДОБАВЛЕНО: видимость попапов
+  // ← видимость попапов
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [isResetOpen, setIsResetOpen] = useState(false);
 
-  // ← ДОБАВЛЕНО: поля регистрации
+  // ← поля регистрации
   const [regFirstName, setRegFirstName] = useState('');
   const [regLastName, setRegLastName] = useState('');
   const [regEmail, setRegEmail] = useState('');
@@ -22,12 +23,13 @@ export default function LoginPage1() {
   const [regError, setRegError] = useState('');
   const [regLoading, setRegLoading] = useState(false);
 
-  // ← ДОБАВЛЕНО: поля сброса пароля
+  // ← поля сброса пароля
   const [resetEmail, setResetEmail] = useState('');
   const [resetError, setResetError] = useState('');
   const [resetLoading, setResetLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { reloadTheme } = useTheme(); 
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -36,6 +38,7 @@ export default function LoginPage1() {
     try {
       const data = await api.login(username, password);
       localStorage.setItem('token', data.access_token);
+      reloadTheme();   // ← подтянуть тему под нового пользователя
       navigate('/');
     } catch (err) {
       setError(err.message);
@@ -44,7 +47,7 @@ export default function LoginPage1() {
     }
   }
 
-  // ← ДОБАВЛЕНО: отправка регистрации
+  // ← отправка регистрации
   async function handleRegister(e) {
     e.preventDefault();
     setRegError('');
@@ -71,7 +74,7 @@ export default function LoginPage1() {
     }
   }
 
-  // ← ДОБАВЛЕНО: отправка почты для подтверждения
+  // ← отправка почты для подтверждения
   async function handleReset(e) {
     e.preventDefault();
     setResetError('');

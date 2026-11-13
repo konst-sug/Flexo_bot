@@ -6,7 +6,6 @@ import Select from '../components/Select';
 import TextareaCard from '../components/TextAreaCard';
 import FilePickCard from '../components/FilePickCard';
 import RequestIcon from '../assets/icons/mdi-icons/mdi--pencil-outline.svg'
-import MultiTextIcon from '../assets/icons/mdi-icons/mdi--text-box-edit-outline.svg'
 import PromptPlusIcon from '../assets/icons/mdi-icons/mdi--view-dashboard-edit-outline.svg'
 
 export default function DashboardPage() {
